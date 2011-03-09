@@ -49,6 +49,17 @@ public class FieldCollector extends FieldCollectorBase {
         }
     }
 
+    public FieldCollector(IndexSchema schema, String field) {
+        this(schema, new HashSet<String>(Arrays.asList(field)));
+    }
+
+    public FieldCollector(FieldCollectorBase fc) {
+        this.returnFields = new HashSet<String>();
+        this.returnFields.add(fc.getFieldName());
+        this.collectors = new ArrayList<FieldCollectorBase>();
+        this.collectors.add(fc);
+    }
+
     @Override
     public void setNextReader(IndexReader reader, int docBase) throws IOException {
         for (Collector c : this.collectors) {
@@ -58,6 +69,7 @@ public class FieldCollector extends FieldCollectorBase {
 
     public void addValuesToResponse(SolrQueryResponse rsp) {
         for (FieldCollectorBase c : this.collectors) {
+            log.info("adding values from " + c.getResponseFieldName() + " collector");
             c.addValuesToResponse(rsp);
         }
     }
@@ -80,5 +92,20 @@ public class FieldCollector extends FieldCollectorBase {
     @Override
     public boolean acceptsDocsOutOfOrder() {
         return true;
+    }
+
+    @Override
+    public String getFieldName() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String getResponseFieldName() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setResponseFieldName(String responseFieldName) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

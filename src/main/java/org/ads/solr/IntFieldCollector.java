@@ -30,6 +30,7 @@ public class IntFieldCollector extends FieldCollectorBase {
     private IndexReader reader;
     private int docBase;
     private String fieldName;
+    private String responseFieldName;
 
     private ArrayList<Integer> values;
     private int[] valueMap;
@@ -74,7 +75,25 @@ public class IntFieldCollector extends FieldCollectorBase {
 
     @Override
     public void addValuesToResponse(SolrQueryResponse rsp) {
-        rsp.add(this.fieldName, this.values);
+        rsp.add(this.getResponseFieldName(), this.values);
     }
 
+    @Override
+    public String getFieldName() {
+        return this.fieldName;
+    }
+
+    @Override
+    public String getResponseFieldName() {
+        if (this.responseFieldName == null) {
+            return this.fieldName;
+        } else {
+            return this.responseFieldName;
+        }
+    }
+
+    @Override
+    public void setResponseFieldName(String responseFieldName) {
+        this.responseFieldName = responseFieldName;
+    }
 }

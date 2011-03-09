@@ -15,4 +15,7 @@ import org.apache.solr.response.SolrQueryResponse;
  */
 public abstract class FieldCollectorBase extends Collector {
     public abstract void addValuesToResponse(SolrQueryResponse rsp);
+    public abstract String getFieldName();
+    public abstract String getResponseFieldName();
+    public abstract void setResponseFieldName(String responseFieldName);
 }
