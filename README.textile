@@ -1,0 +1,58 @@
+h1. Description
+
+h2. WHAT?
+
+This add-on lets you query solr and get back a response containing the values of a specific
+field or field from documents matching your query.
+
+h2. WAIT, WHAT?
+
+Right. If you want a response with just the ids or whatever of the matching documents, why not
+just use the 'fl' param? Because that doesn't perform very well if the number of matching rows
+you want back gets past 10k or so.
+
+h2. WHY?
+
+I needed a way to get the just ids for a large number of documents matching a query. Like, millions.
+There's more details on the why in a talk I gave: http://code4lib.org/conference/2011/luker
+
+h2. HOW?
+
+By using a custom Lucene Collector class called FieldCollector. It skips the part of the search 
+process that creates document objects for every hit and stashes them in the document cache. Instead
+it just collects the single field value you're interested in. See chapter 6.2 of the Lucene book
+for some fairly similar examples.
+
+h1. Install
+
+The master branch is currently coded against the 1.4.1 API. There is also a 3.x branch. You'll need
+a checkout or download of solr, obvs.
+
+# cd solr/contrib
+# git clone git://github.com/lbjay/Solr-FieldQuery.git
+# add the required settings to solrconfig.xml (see below)
+# ant compile
+# ant run-example
+
+h2. solrconfig.xml
+
+Add the following anywhere in the <config>
+
+<pre>
+    <searchComponent name="field_query" class="org.ads.solr.FieldQueryComponent" />
+
+    <requestHandler name="field_query" class="solr.SearchHandler">
+        <lst name="defaults">
+            <str name="echoParams">explicit</str>
+            <str name="fl">id</str>
+        </lst>
+        <arr name="components">
+            <str>field_query</str>
+            <str>stats</str>
+        </arr>
+    </requestHandler>
+</pre>
+
+h1. Try it out
+
+http://localhost:8983/solr/select/?q=foo&fl=id&qt=field_query
