@@ -48,9 +48,6 @@ public class IntFieldCollector extends FieldCollectorBase {
 
     @Override
     public void collect(int doc) throws IOException {
-        log.info("docBase: " + this.docBase);
-        log.info("collecting: " + doc);
-        log.info("value: " + this.valueMap[doc]);
         this.values.add(this.valueMap[doc]);
     }
 
