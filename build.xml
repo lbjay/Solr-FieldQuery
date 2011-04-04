@@ -67,8 +67,7 @@
       basedir="build/classes"
       manifest="../../${dest}/META-INF/MANIFEST.MF"/>
 -->
-    <copy file="${dest}/${fullnamever}.jar" todir="lib"/>
-    <copy file="${dest}/${fullnamever}.jar" todir="${solr-path}/lib"/>
+    <copy file="${dest}/${fullnamever}.jar" todir="${solr-path}/dist"/>
   </target>
 
   <target name="debug">
